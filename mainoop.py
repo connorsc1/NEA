@@ -130,7 +130,7 @@ class login(tk.Frame):
 
         # back button
 
-        self.back_btn = tk.PhotoImage(file='assets/back2.png')
+        self.back_btn = tk.PhotoImage(file='assets/back.png')
         ttk.back = tk.Button(self, image=self.back_btn, bg="#333333", activebackground="#333333",
                              borderwidth=0, command=lambda: controller.show_frame("opening"))
         ttk.back.pack(anchor="w", side="bottom")
