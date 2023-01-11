@@ -111,6 +111,7 @@ class login(tk.Frame):
             if usern.lower() in info and info[usern.lower()] == passw:
                 # make it go to the main menu screen when the screen is created
                 # controller.show_frame("")
+                pass
             else:
                 incorrect.config(text='Incorrect, try again')
                 incorrect.pack(pady=20)
@@ -127,11 +128,12 @@ class login(tk.Frame):
         ttk.enter = tk.Button(self, image=self.enter_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=log_in).pack()
 
-        # changes to the opening frame
+        # back button
 
-        button = tk.Button(self, text="back to opening",
-                           command=lambda: controller.show_frame("opening"))
-        # button.pack()
+        self.back_btn = tk.PhotoImage(file='assets/back2.png')
+        ttk.back = tk.Button(self, image=self.back_btn, bg="#333333", activebackground="#333333",
+                             borderwidth=0, command=lambda: controller.show_frame("opening"))
+        ttk.back.pack(anchor="w", side="bottom")
 
 
 class signup(tk.Frame):
