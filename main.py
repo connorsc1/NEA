@@ -6,6 +6,7 @@ from tkinter import ttk
 from tkinter.font import Font
 from PIL import Image, ImageTk
 import json
+import random
 
 # main app
 
@@ -18,14 +19,12 @@ class App(tk.Tk):
         self.title_font = Font(family='Secular One')
 
         # creating the container
-
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         # adding navigation
-
         self.frames = {}
         for F in (opening, login, signup, mainmenu, settings, game):
             page_name = F.__name__
@@ -48,31 +47,26 @@ class opening(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
         # icon inside opening screen
-
         self.icon_text = tk.Label(self, text='21', font=("Secular One", 200),
                                   bg="#333333", fg="#FFFFFF")
         self.icon_text.pack(pady=20)
 
         # log in button
-
         self.login_btn = tk.PhotoImage(file='assets/buttons/login.png')
         ttk.login = tk.Button(self, image=self.login_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=lambda: controller.show_frame("login"))
         ttk.login.pack()
 
         # sign up button
-
         self.signup_btn = tk.PhotoImage(file='assets/buttons/signup.png')
         ttk.signup = tk.Button(self, image=self.signup_btn, bg="#333333", activebackground="#333333",
                                borderwidth=0, command=lambda: controller.show_frame("signup"))
         ttk.signup.pack(pady=10)
 
         # quit button
-
         self.quit_btn = tk.PhotoImage(file='assets/buttons/quit.png')
         ttk.quitb = tk.Button(self, image=self.quit_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=quit)
@@ -86,11 +80,9 @@ class login(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
         # invisible label
-
         ilabel = tk.Label(self, text="", bg="#333333")
         ilabel.pack(side="top", fill="x", pady=120)
 
@@ -99,7 +91,6 @@ class login(tk.Frame):
         login_text.pack(pady=20)
 
         # input fields
-
         def on_entry_click_username(event):
             if username_entry.cget('fg') == 'grey':
                 # delete all the text in the entry
@@ -141,7 +132,6 @@ class login(tk.Frame):
         password_entry.pack(pady=10)
 
         # user authentication
-
         incorrect = Label(self, text='', font=("Secular One", 20),
                           bg="#333333", fg="red")
 
@@ -164,13 +154,11 @@ class login(tk.Frame):
                 incorrect.pack(pady=20)
 
         # enter button
-
         self.enter_btn = tk.PhotoImage(file='assets/buttons/enter.png')
         ttk.enter = tk.Button(self, image=self.enter_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=log_in).pack()
 
         # back button
-
         self.back_btn = tk.PhotoImage(file='assets/buttons/back.png')
         ttk.back = tk.Button(self, image=self.back_btn, bg="#333333", activebackground="#333333",
                              borderwidth=0, command=lambda: controller.show_frame("opening"))
@@ -184,11 +172,9 @@ class signup(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
         # invisible label
-
         ilabel = tk.Label(self, text="", bg="#333333")
         ilabel.pack(side="top", fill="x", pady=120)
 
@@ -197,7 +183,6 @@ class signup(tk.Frame):
         signup_text.pack(pady=20)
 
         # input fields
-
         def on_entry_click_username(event):
             if username_entry.cget('fg') == 'grey':
                 username_entry.delete(0, "end")
@@ -239,7 +224,6 @@ class signup(tk.Frame):
         password_entry.pack(pady=10)
 
         # user auth
-
         incorrect = Label(self, text='', font=("Secular One", 20),
                           bg="#333333", fg="red")
 
@@ -268,14 +252,12 @@ class signup(tk.Frame):
                 incorrect.pack(pady=20)
 
         # submit button
-
         self.submit_btn = tk.PhotoImage(file='assets/buttons/submit.png')
         ttk.enter = tk.Button(self, image=self.submit_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=sign_up)
         ttk.enter.pack()
 
         # back button
-
         self.back_btn = tk.PhotoImage(file='assets/buttons/back.png')
         ttk.back = tk.Button(self, image=self.back_btn, bg="#333333", activebackground="#333333",
                              borderwidth=0, command=lambda: controller.show_frame("opening"))
@@ -289,30 +271,25 @@ class mainmenu(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
         # invisible label
-
         ilabel = tk.Label(self, text="", bg="#333333")
         ilabel.pack(side="top", fill="x", pady=200)
 
         # play button
-
         self.play_btn = tk.PhotoImage(file='assets/buttons/play.png')
         ttk.play = tk.Button(self, image=self.play_btn, bg="#333333", activebackground="#333333",
                              borderwidth=0, command=lambda: controller.show_frame("game"))
         ttk.play.pack()
 
         # settings button
-
         self.settings_btn = tk.PhotoImage(file='assets/buttons/settings.png')
         ttk.settings = tk.Button(self, image=self.settings_btn, bg="#333333", activebackground="#333333",
                                  borderwidth=0, command=lambda: controller.show_frame("settings"))
         ttk.settings.pack(pady=10)
 
         # quit button
-
         self.quit_btn = tk.PhotoImage(file='assets/buttons/quit2.png')
         ttk.quitb = tk.Button(self, image=self.quit_btn, bg="#333333", activebackground="#333333",
                               borderwidth=0, command=quit)
@@ -326,7 +303,6 @@ class settings(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
         # maybe use global variables to tell the game what settings a user has used
@@ -343,29 +319,122 @@ class game(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#35654d")
         self.configure(pady=20)
 
         # dealer frame
-
-        dealer_frame = tk.LabelFrame(self, text='Dealer', bd=0, bg='#FFFFFF')
-        dealer_frame.grid(row=0, column=0, padx=20, ipadx=20)
+        dealer_frame = tk.LabelFrame(
+            self, text='Dealer', bd=0, bg='#35654d', fg='#FFFFFF')
+        dealer_frame.pack(pady=20, ipadx=20)
 
         # cards in dealer frame
-
-        dealer_label = ttk.Label(dealer_frame, text='')
+        dealer_label = Label(dealer_frame, text='card', bd=0, bg='#35654d')
         dealer_label.pack(pady=20)
 
         # player frame
-
-        player_frame = LabelFrame(self, text='Player', bd=0, bg='#FFFFFF')
-        player_frame.grid(row=0, column=1, ipadx=20)
+        player_frame = LabelFrame(
+            self, text='Player', bd=0, bg='#35654d', fg='#FFFFFF')
+        player_frame.pack(ipadx=20)
 
         # cards in player frame
-
-        player_label = ttk.Label(player_frame, text='')
+        player_label = Label(player_frame, text='pcard', bd=0, bg='#35654d')
         player_label.pack(pady=20)
+
+        # resize card images
+        def resize(card):
+            # open the image
+            our_card_img = Image.open(card)
+
+            # Resizing it
+            our_card_resized_image = our_card_img.resize((150, 218))
+
+            # output card
+            global our_card_image
+            our_card_image = ImageTk.PhotoImage(our_card_resized_image)
+            return our_card_image
+
+        # shuffle function
+        def shuffle():
+            suits = ['diamonds', 'clubs', 'hearts', 'spades']
+            values = range(1, 14)
+            # 1 is ace, 11 = jack, 12 = queen, 13 = king
+
+            global deck
+            deck = []
+
+            for suit in suits:
+                for value in values:
+                    deck.append(f'{value}_of_{suit}')
+
+            # creating players
+            global player, dealer
+            dealer = []
+            player = []
+
+            # take a random card for dealer
+            card = random.choice(deck)
+
+            # remove card from deck
+            deck.remove(card)
+
+            # give card to dealer
+            dealer.append(card)
+
+            # show card on screen
+            global dealer_image
+            dealer_image = resize(f'assets/cards/{card}.png')
+            dealer_label.config(image=dealer_image)
+
+            # take a random card for player
+            card = random.choice(deck)
+
+            # remove card from deck
+            deck.remove(card)
+
+            # give card to player
+            player.append(card)
+
+            # show card on screen
+            global player_image
+            player_image = resize(f'assets/cards/{card}.png')
+            player_label.config(image=player_image)
+
+        # deal cards out to player / dealer
+        def deal_cards():
+            try:
+                # get dealers card
+                card = random.choice(deck)
+                deck.remove(card)
+                dealer.append(card)
+
+                # show card on screen
+                global dealer_image
+                dealer_image = resize(f'assets/cards/{card}.png')
+                dealer_label.config(image=dealer_image)
+
+                # get players card
+                card = random.choice(deck)
+                deck.remove(card)
+                player.append(card)
+
+                # show card on screen
+                global player_image
+                player_image = resize(f'assets/cards/{card}.png')
+                player_label.config(image=player_image)
+
+                print(f'{len(deck)} cards left')
+            except:
+                pass
+
+        # shuffle / deal buttons
+        shuffleb = tk.Button(self, text='Shuffle', command=shuffle)
+        shuffleb.pack(pady=20)
+
+        cardb = tk.Button(self, text='Get Card', command=deal_cards)
+        cardb.pack(pady=20)
+
+        # shuffle the deck once
+        shuffle()
 
 
 class blank(tk.Frame):
@@ -375,14 +444,12 @@ class blank(tk.Frame):
         self.controller = controller
 
         # configuring the frame
-
         self.configure(background="#333333")
 
 
 if __name__ == "__main__":
 
     # configuring the app
-
     app = App()
     app.title('BlackJack Card Game NEA')
     app.iconbitmap('assets/icon.ico')
@@ -391,5 +458,4 @@ if __name__ == "__main__":
     app.configure(background="#333333")
 
     # open the main app
-
     app.mainloop()
