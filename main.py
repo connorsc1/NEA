@@ -1,4 +1,4 @@
-# importint necessary libraries
+# importing necessary libraries
 
 import tkinter as tk
 from tkinter import *
@@ -9,7 +9,6 @@ import json
 import random
 
 # main app
-
 
 class App(tk.Tk):
 
@@ -325,20 +324,45 @@ class game(tk.Frame):
         # dealer frame
         dealer_frame = tk.LabelFrame(
             self, text='Dealer', bd=0, bg='#35654d', fg='#FFFFFF')
-        dealer_frame.pack(pady=20, ipadx=20)
-
-        # cards in dealer frame
-        dealer_label = Label(dealer_frame, text='card', bd=0, bg='#35654d')
-        dealer_label.pack(pady=20)
-
+        dealer_frame.pack(ipadx=20)
+        
         # player frame
         player_frame = LabelFrame(
             self, text='Player', bd=0, bg='#35654d', fg='#FFFFFF')
         player_frame.pack(ipadx=20)
 
+        # cards in dealer frame
+        dealer_label_1 = Label(dealer_frame, text='', bd=0, bg='#35654d')
+        dealer_label_1.grid(row=0, column=0, padx=20, pady=20)
+
+        dealer_label_2 = Label(dealer_frame, text='', bd=0, bg='#35654d')
+        dealer_label_2.grid(row=0, column=1, padx=20, pady=20)
+
+        dealer_label_3 = Label(dealer_frame, text='', bd=0, bg='#35654d')
+        dealer_label_3.grid(row=0, column=2, padx=20, pady=20)
+
+        dealer_label_4 = Label(dealer_frame, text='', bd=0, bg='#35654d')
+        dealer_label_4.grid(row=0, column=3, padx=20, pady=20)
+
+        dealer_label_5 = Label(dealer_frame, text='', bd=0, bg='#35654d')
+        dealer_label_5.grid(row=0, column=4, padx=20, pady=20)
+
         # cards in player frame
-        player_label = Label(player_frame, text='pcard', bd=0, bg='#35654d')
-        player_label.pack(pady=20)
+        player_label_1 = Label(player_frame, text='', bd=0, bg='#35654d')
+        player_label_1.grid(row=1, column=0, padx=20, pady=20)
+
+        player_label_2 = Label(player_frame, text='', bd=0, bg='#35654d')
+        player_label_2.grid(row=1, column=1, padx=20, pady=20)
+
+        player_label_3 = Label(player_frame, text='', bd=0, bg='#35654d')
+        player_label_3.grid(row=1, column=2, padx=20, pady=20)
+
+        player_label_4 = Label(player_frame, text='', bd=0, bg='#35654d')
+        player_label_4.grid(row=1, column=3, padx=20, pady=20)
+
+        player_label_5 = Label(player_frame, text='', bd=0, bg='#35654d')
+        player_label_5.grid(row=1, column=4, padx=20, pady=20)
+
 
         # resize card images
         def resize(card):
@@ -355,6 +379,19 @@ class game(tk.Frame):
 
         # shuffle function
         def shuffle():
+            # Clear old cards from previous games
+            dealer_label_1.config(image='')
+            dealer_label_2.config(image='')
+            dealer_label_3.config(image='')
+            dealer_label_4.config(image='')
+            dealer_label_5.config(image='')
+
+            player_label_1.config(image='')
+            player_label_2.config(image='')
+            player_label_3.config(image='')
+            player_label_4.config(image='')
+            player_label_5.config(image='')
+
             suits = ['diamonds', 'clubs', 'hearts', 'spades']
             values = range(1, 14)
             # 1 is ace, 11 = jack, 12 = queen, 13 = king
@@ -367,71 +404,161 @@ class game(tk.Frame):
                     deck.append(f'{value}_of_{suit}')
 
             # creating players
-            global player, dealer
+            global player, dealer, dealer_spot, player_spot
             dealer = []
             player = []
+            dealer_spot = 0
+            player_spot = 0
 
-            # take a random card for dealer
-            card = random.choice(deck)
+            # Shuffle 2 cards for dealer and player
 
-            # remove card from deck
-            deck.remove(card)
+            player_hit()
+            dealer_hit()
+            player_hit()
+            dealer_hit()
 
-            # give card to dealer
-            dealer.append(card)
+        def dealer_hit():
+            global dealer_spot
+            if dealer_spot < 5:
+                try:
+                    # get dealer card
+                    dealer_card = random.choice(deck)
+                    deck.remove(dealer_card)
+                    player.append(dealer_card)
 
-            # show card on screen
-            global dealer_image
-            dealer_image = resize(f'assets/cards/{card}.png')
-            dealer_label.config(image=dealer_image)
+                    # show card on screen
+                    global dealer_image1, dealer_image2, dealer_image3, dealer_image4, dealer_image5
 
-            # take a random card for player
-            card = random.choice(deck)
+                    if dealer_spot == 0:
+                        # Resize card
+                        dealer_image1 = resize(f'assets/cards/{dealer_card}.png')
+                        # Output card
+                        dealer_label_1.config(image=dealer_image1)
+                        #print(f'{len(deck)} cards left')
+                        # Increment dealer spot counter
+                        dealer_spot += 1
+                    elif dealer_spot == 1:
+                        # Resize card
+                        dealer_image2 = resize(f'assets/cards/{dealer_card}.png')
+                        # Output card
+                        dealer_label_2.config(image=dealer_image2)
+                        # Increment dealer spot counter
+                        dealer_spot += 1
+                    elif dealer_spot == 2:
+                        # Resize card
+                        dealer_image3 = resize(f'assets/cards/{dealer_card}.png')
+                        # Output card
+                        dealer_label_3.config(image=dealer_image3)
+                        # Increment dealer spot counter
+                        dealer_spot += 1
+                    elif dealer_spot == 3:
+                        # Resize card
+                        dealer_image4 = resize(f'assets/cards/{dealer_card}.png')
+                        # Output card
+                        dealer_label_4.config(image=dealer_image4)
+                        # Increment dealer spot counter
+                        dealer_spot += 1
+                    elif dealer_spot == 4:
+                        # Resize card
+                        dealer_image5 = resize(f'assets/cards/{dealer_card}.png')
+                        # Output card
+                        dealer_label_5.config(image=dealer_image5)
+                        # Increment dealer spot counter
+                        dealer_spot += 1
+                except:
+                    print("No cards in deck")
 
-            # remove card from deck
-            deck.remove(card)
+        def player_hit():
+            global player_spot
+            if player_spot < 5:
+                try:
+                    # get players card
+                    player_card = random.choice(deck)
+                    deck.remove(player_card)
+                    player.append(player_card)
 
-            # give card to player
-            player.append(card)
+                    # show card on screen
+                    global player_image1, player_image2, player_image3, player_image4, player_image5
 
-            # show card on screen
-            global player_image
-            player_image = resize(f'assets/cards/{card}.png')
-            player_label.config(image=player_image)
+                    if player_spot == 0:
+                        # Resize card
+                        player_image1 = resize(f'assets/cards/{player_card}.png')
+                        # Output card
+                        player_label_1.config(image=player_image1)
+                        #print(f'{len(deck)} cards left')
+                        # Increment player spot counter
+                        player_spot += 1
+                    elif player_spot == 1:
+                        # Resize card
+                        player_image2 = resize(f'assets/cards/{player_card}.png')
+                        # Output card
+                        player_label_2.config(image=player_image2)
+                        # Increment player spot counter
+                        player_spot += 1
+                    elif player_spot == 2:
+                        # Resize card
+                        player_image3 = resize(f'assets/cards/{player_card}.png')
+                        # Output card
+                        player_label_3.config(image=player_image3)
+                        # Increment player spot counter
+                        player_spot += 1
+                    elif player_spot == 3:
+                        # Resize card
+                        player_image4 = resize(f'assets/cards/{player_card}.png')
+                        # Output card
+                        player_label_4.config(image=player_image4)
+                        # Increment player spot counter
+                        player_spot += 1
+                    elif player_spot == 4:
+                        # Resize card
+                        player_image5 = resize(f'assets/cards/{player_card}.png')
+                        # Output card
+                        player_label_5.config(image=player_image5)
+                        # Increment player spot counter
+                        player_spot += 1
+                except:
+                    print("No cards in deck")
 
         # deal cards out to player / dealer
-        def deal_cards():
-            try:
-                # get dealers card
-                card = random.choice(deck)
-                deck.remove(card)
-                dealer.append(card)
+        # def deal_cards():
+        #     try:
+        #         # get dealers card
+        #         card = random.choice(deck)
+        #         deck.remove(card)
+        #         dealer.append(card)
 
-                # show card on screen
-                global dealer_image
-                dealer_image = resize(f'assets/cards/{card}.png')
-                dealer_label.config(image=dealer_image)
+        #         # show card on screen
+        #         global dealer_image
+        #         dealer_image = resize(f'assets/cards/{card}.png')
+        #         dealer_label.config(image=dealer_image)
 
-                # get players card
-                card = random.choice(deck)
-                deck.remove(card)
-                player.append(card)
+        #         # get players card
+        #         card = random.choice(deck)
+        #         deck.remove(card)
+        #         player.append(card)
 
-                # show card on screen
-                global player_image
-                player_image = resize(f'assets/cards/{card}.png')
-                player_label.config(image=player_image)
+        #         # show card on screen
+        #         global player_image
+        #         player_image = resize(f'assets/cards/{card}.png')
+        #         player_label.config(image=player_image)
 
-                print(f'{len(deck)} cards left')
-            except:
-                pass
+        #         print(f'{len(deck)} cards left')
+        #     except:
+        #         pass
 
         # shuffle / deal buttons
-        shuffleb = tk.Button(self, text='Shuffle', command=shuffle)
-        shuffleb.pack(pady=20)
 
-        cardb = tk.Button(self, text='Get Card', command=deal_cards)
-        cardb.pack(pady=20)
+        button_frame = Frame(self, bg='#35654d')
+        button_frame.pack(pady=20)
+
+        shuffleb = tk.Button(button_frame, text='Shuffle', command=shuffle)
+        shuffleb.grid(row=0, column=0)
+
+        cardb = tk.Button(button_frame, text='Hit me', command=player_hit)
+        cardb.grid(row=0, column=1, padx=10)
+
+        standb = tk.Button(button_frame, text='Stand')
+        standb.grid(row=0, column=2)
 
         # shuffle the deck once
         shuffle()
