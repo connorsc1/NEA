@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from tkinter.font import Font
 from PIL import Image, ImageTk
 import json
@@ -200,7 +201,6 @@ class signup(tk.Frame):
         username_entry.bind('<FocusOut>', on_focusout_username)
         username_entry.config(fg='grey')
         username_entry.pack()
-
         def on_entry_click_password(event):
             password_entry.config(show='*')
             if password_entry.cget('fg') == 'grey':
@@ -325,7 +325,7 @@ class game(tk.Frame):
         dealer_frame = tk.LabelFrame(
             self, text='Dealer', bd=0, bg='#35654d', fg='#FFFFFF')
         dealer_frame.pack(ipadx=20)
-        
+       
         # player frame
         player_frame = LabelFrame(
             self, text='Player', bd=0, bg='#35654d', fg='#FFFFFF')
@@ -364,6 +364,27 @@ class game(tk.Frame):
         player_label_5.grid(row=1, column=4, padx=20, pady=20)
 
 
+        # testing for blackjack after shuffle
+        def blackjack_test(player):
+            if not first:
+                if player == "dealer":
+                    if len(dealer_score) == 2:
+                        if dealer_score[0] + dealer_score[1] == 21:
+                            messagebox.showinfo('Blackjack', 'Dealer Wins!')
+                            # disable the butons for players
+                            cardb.config(state='disabled')
+                            standb.config(state='disabled')
+
+                if player == "player":
+                    if len(player_score) == 2:
+                        if player_score[0] + player_score[1] == 21:
+                            messagebox.showinfo('Blackjack', 'You have won!')
+                            # disable the buttons for players
+                            cardb.config(state='disabled')
+                            standb.config(state='disabled')
+            else:
+                pass
+
         # resize card images
         def resize(card):
             # open the image
@@ -379,6 +400,10 @@ class game(tk.Frame):
 
         # shuffle function
         def shuffle():
+            # Enable buttons from disbaling on blackjack
+            cardb.config(state='normal')
+            standb.config(state='normal')
+
             # Clear old cards from previous games
             dealer_label_1.config(image='')
             dealer_label_2.config(image='')
@@ -396,19 +421,23 @@ class game(tk.Frame):
             values = range(1, 14)
             # 1 is ace, 11 = jack, 12 = queen, 13 = king
 
+            # defining empty deck
             global deck
             deck = []
 
+            # creating full deck
             for suit in suits:
                 for value in values:
                     deck.append(f'{value}_of_{suit}')
 
             # creating players
-            global player, dealer, dealer_spot, player_spot
+            global player, dealer, dealer_spot, player_spot, dealer_score, player_score
             dealer = []
             player = []
             dealer_spot = 0
             player_spot = 0
+            dealer_score = []
+            player_score = []
 
             # Shuffle 2 cards for dealer and player
 
@@ -424,7 +453,17 @@ class game(tk.Frame):
                     # get dealer card
                     dealer_card = random.choice(deck)
                     deck.remove(dealer_card)
-                    player.append(dealer_card)
+                    # append card to dealer list
+                    dealer.append(dealer_card)
+                    # append card to score list and convert values to real blackjack values
+                    numberofdealercard = int(dealer_card.split("_", 1)[0]) # Find the number of the card
+                    if numberofdealercard == 1: # Changing Ace to 11
+                        dealer_score.append(11)
+                    elif numberofdealercard == 11 or numberofdealercard == 12 or numberofdealercard == 13: #Changing jack, queen and king to value 10 (like in blackjack)
+                        dealer_score.append(10)
+                    else:
+                        dealer_score.append(numberofdealercard)
+
 
                     # show card on screen
                     global dealer_image1, dealer_image2, dealer_image3, dealer_image4, dealer_image5
@@ -468,14 +507,26 @@ class game(tk.Frame):
                 except:
                     print("No cards in deck")
 
+                # Check for blackjack after dealing out cards 
+                blackjack_test("dealer")
+
         def player_hit():
             global player_spot
             if player_spot < 5:
                 try:
-                    # get players card
+                    # get player card
                     player_card = random.choice(deck)
                     deck.remove(player_card)
-                    player.append(player_card)
+                    # append card to player list
+                    dealer.append(player_card)
+                    # append card to score list and convert values to real blackjack values
+                    numberofplayercard = int(player_card.split("_", 1)[0]) # Find the number of the card
+                    if numberofplayercard == 1: # Changing Ace to 11
+                        player_score.append(11)
+                    elif numberofplayercard == 11 or numberofplayercard == 12 or numberofplayercard == 13: #Changing jack, queen and king to value 10 (like in blackjack)
+                        player_score.append(10)
+                    else:
+                        player_score.append(numberofplayercard)
 
                     # show card on screen
                     global player_image1, player_image2, player_image3, player_image4, player_image5
@@ -519,6 +570,9 @@ class game(tk.Frame):
                 except:
                     print("No cards in deck")
 
+                # Check for blackjack after dealing out cards 
+                blackjack_test("player")
+
         # deal cards out to player / dealer
         # def deal_cards():
         #     try:
@@ -561,7 +615,9 @@ class game(tk.Frame):
         standb.grid(row=0, column=2)
 
         # shuffle the deck once
+        first = TRUE
         shuffle()
+        first = FALSE
 
 
 class blank(tk.Frame):
