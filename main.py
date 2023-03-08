@@ -366,12 +366,18 @@ class game(tk.Frame):
 
         # testing for blackjack after shuffle
         def blackjack_test(player):
+            global player_total, dealer_total
+            # keep track of total score of player / dealer
+            player_total = 0
+            dealer_total = 0
+
             if not first:
                 if player == "dealer":
                     if len(dealer_score) == 2:
                         if dealer_score[0] + dealer_score[1] == 21:
                             # update the status
                             blackjack_status["dealer"] = "yes"
+
                             # messagebox.showinfo('Blackjack', 'Dealer Wins!')
                             # disable the butons for players
                             # cardb.config(state='disabled')
@@ -382,31 +388,72 @@ class game(tk.Frame):
                         if player_score[0] + player_score[1] == 21:
                             # update the status
                             blackjack_status["player"] = "yes"
+
                             # messagebox.showinfo('Blackjack', 'You have won!')
                             # disable the buttons for players
                             # cardb.config(state='disabled')
                             # standb.config(state='disabled')
+                    else: 
+                        # loop through player score list and add up cards
+                        for score in player_score: 
+                            # add score
+                            player_total += score
+                            if player_total == 21:
+                                blackjack_status["player"] = "yes"
+                            elif player_total > 21:
+                                blackjack_status["player"] = "bust"
                 
                 if len(dealer_score) == 2 and len(player_score) == 2:
                     # check for tie
                     if blackjack_status["dealer"] == "yes" and blackjack_status["player"] == "yes":
-                        # There is a tie
                         messagebox.showinfo('Push', 'Its a tie!')
+                        # disable the butons for players
                         cardb.config(state='disabled')
                         standb.config(state='disabled')
+                    
                     # check for dealer win
                     elif blackjack_status["dealer"] == "yes":
                         messagebox.showinfo('Blackjack', 'Dealer Wins!')
                         # disable the butons for players
                         cardb.config(state='disabled')
                         standb.config(state='disabled')
+                    
                     # check for player win
                     elif blackjack_status["player"] == "yes":
                         messagebox.showinfo('Blackjack', 'You have won!')
                         # disable the buttons for players
                         cardb.config(state='disabled')
                         standb.config(state='disabled')
-
+                
+                # checking for 21 after hit me (more than 2 cards)
+                else:
+                    # check for tie
+                    if blackjack_status["dealer"] == "yes" and blackjack_status["player"] == "yes":
+                        messagebox.showinfo('Push', 'Its a tie!')
+                        # disable the butons for players
+                        cardb.config(state='disabled')
+                        standb.config(state='disabled')
+                    
+                    # check for dealer win
+                    elif blackjack_status["dealer"] == "yes":
+                        messagebox.showinfo('Blackjack', 'Dealer Wins!')
+                        # disable the butons for players
+                        cardb.config(state='disabled')
+                        standb.config(state='disabled')
+                    
+                    # check for player win
+                    elif blackjack_status["player"] == "yes":
+                        messagebox.showinfo('Blackjack', 'You have won!')
+                        # disable the buttons for players
+                        cardb.config(state='disabled')
+                        standb.config(state='disabled')
+                
+                # check for player bust
+                if blackjack_status["player"] == "bust":
+                    messagebox.showinfo('Player bust', f'You lose - {player_total}')
+                    # disable the buttons for players
+                    cardb.config(state='disabled')
+                    standb.config(state='disabled')
             else:
                 pass
 
@@ -425,9 +472,14 @@ class game(tk.Frame):
 
         # shuffle function
         def shuffle():
-            # Check if the dealer and player have won, if they both win it is a tie
-            global blackjack_status
+            # used to check if the dealer and player have won, if they both win it is a tie
+            global blackjack_status, player_total, dealer_total
             blackjack_status = {"dealer":"no", "player":"no"}
+            
+            # keep track of total score of player / dealer
+            player_total = 0
+            dealer_total = 0
+
             # Enable buttons from disbaling on blackjack
             cardb.config(state='normal')
             standb.config(state='normal')
