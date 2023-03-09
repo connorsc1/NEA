@@ -366,7 +366,7 @@ class game(tk.Frame):
 
         # testing for blackjack after shuffle
         def blackjack_test(player):
-            global player_total, dealer_total
+            global player_total, dealer_total, player_score
             # keep track of total score of player / dealer
             player_total = 0
             dealer_total = 0
@@ -398,10 +398,30 @@ class game(tk.Frame):
                         for score in player_score: 
                             # add score
                             player_total += score
-                            if player_total == 21:
-                                blackjack_status["player"] = "yes"
-                            elif player_total > 21:
-                                blackjack_status["player"] = "bust"
+
+                        if player_total == 21:
+                            blackjack_status["player"] = "yes"
+                        
+                        elif player_total > 21:
+                            # check if ace needs to be converted
+                            for card_num, card in enumerate(player_score):
+                                if card == 11:
+                                    player_score[card_num] = 1
+
+                                    # Clear player total and recalc with ace being 1
+                                    player_total = 0
+                                    for score in player_score:
+                                        # Add score
+                                        player_total += score
+                                    
+                                    # check for over 21 after ace is converted
+                                    if player_total > 21:
+                                        blackjack_status["player"] = "bust"
+                            else:
+                                if player_total == 21:
+                                    blackjack_status["player"] = "yes"
+                                if player_total > 21:
+                                    blackjack_status["player"] = "bust"
                 
                 if len(dealer_score) == 2 and len(player_score) == 2:
                     # check for tie
