@@ -1,4 +1,4 @@
-# importing necessary libraries
+# importing necessary libraries 
 
 import tkinter as tk
 from tkinter import *
@@ -702,6 +702,47 @@ class game(tk.Frame):
 
         # shuffle / deal buttons
 
+        def stand():
+            global player_total, dealer_total, player_score
+            # keep track of total score of player / dealer
+            player_total = 0
+            dealer_total = 0
+
+            # get dealers score
+            for score in dealer_score:
+                # add up score
+                dealer_total += score
+
+            # get players score
+            for score in player_score:
+                # add up score
+                player_total += score
+
+            # freeze buttons
+            cardb.config(state="disabled")
+            standb.config(state="disabled")
+
+            # see if dealer has 17 or above
+            if dealer_total >= 17:
+                # check if bust
+                if dealer_total > 21:
+                    # bust
+                    messagebox.showinfo('Dealer bust', f'You have won! dealer - {dealer_total}')
+                elif dealer_total == player_total:
+                    # tie
+                    messagebox.showinfo('Push', 'Its a tie!')
+                elif dealer_total > player_total:
+                    # dealer wins
+                    messagebox.showinfo('Blackjack', 'Dealer wins!')
+                else:
+                    # player wins
+                    messagebox.showinfo('Blackjack', 'You have won!')
+            else:
+                # give dealer a card
+                dealer_hit()
+                # recalculate
+                stand()
+
         button_frame = Frame(self, bg='#35654d')
         button_frame.pack(pady=20)
 
@@ -711,7 +752,7 @@ class game(tk.Frame):
         cardb = tk.Button(button_frame, text='Hit me', command=player_hit)
         cardb.grid(row=0, column=1, padx=10)
 
-        standb = tk.Button(button_frame, text='Stand')
+        standb = tk.Button(button_frame, text='Stand', command=stand)
         standb.grid(row=0, column=2)
 
         # shuffle the deck once
