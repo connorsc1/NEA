@@ -383,6 +383,35 @@ class game(tk.Frame):
                             # cardb.config(state='disabled')
                             # standb.config(state='disabled')
 
+                    else: 
+                        # loop through dealer score list and add up cards
+                        for score in dealer_score: 
+                            # add score
+                            dealer_total += score
+                        if dealer_total == 21:
+                            blackjack_status["dealer"] = "yes"
+                        
+                        elif dealer_total > 21:
+                            # check if ace needs to be converted
+                            for card_num, card in enumerate(dealer_score):
+                                if card == 11:
+                                    dealer_score[card_num] = 1
+
+                                    # Clear dealer total and recalc with ace being 1
+                                    dealer_total = 0
+                                    for score in dealer_score:
+                                        # Add score
+                                        dealer_total += score
+                                    
+                                    # check for over 21 after ace is converted
+                                    if dealer_total > 21:
+                                        blackjack_status["dealer"] = "bust"
+                            else:
+                                if dealer_total == 21:
+                                    blackjack_status["dealer"] = "yes"
+                                if dealer_total > 21:
+                                    blackjack_status["dealer"] = "bust"
+
                 if player == "player":
                     if len(player_score) == 2:
                         if player_score[0] + player_score[1] == 21:
@@ -548,7 +577,9 @@ class game(tk.Frame):
 
         def dealer_hit():
             global dealer_spot
-            if dealer_spot < 5:
+            global player_total, dealer_total, player_score, dealer_score
+
+            if dealer_spot <= 5:
                 try:
                     # get dealer card
                     dealer_card = random.choice(deck)
@@ -604,6 +635,26 @@ class game(tk.Frame):
                         dealer_label_5.config(image=dealer_image5)
                         # Increment dealer spot counter
                         dealer_spot += 1
+                        
+                        # See if they have 5 cards
+                        player_total = 0
+                        dealer_total = 0
+
+                        # get dealer score
+                        for score in dealer_score:
+                            dealer_total += score
+
+                        # get player score
+                        for score in player_score:
+                            player_total += score
+
+                        # Check to see if <= 21
+                        if dealer_total <= 21:
+                            # dealer wins
+                            # disable buttons
+                            cardb.config(state="disabled")
+                            standb.config(state="disabled")
+                            messagebox.showinfo("Five card trick", "Dealer wins")
                 except:
                     print("No cards in deck")
 
@@ -612,7 +663,9 @@ class game(tk.Frame):
 
         def player_hit():
             global player_spot
-            if player_spot < 5:
+            global player_total, dealer_total, player_score, dealer_score
+
+            if player_spot <= 5:
                 try:
                     # get player card
                     player_card = random.choice(deck)
@@ -667,6 +720,26 @@ class game(tk.Frame):
                         player_label_5.config(image=player_image5)
                         # Increment player spot counter
                         player_spot += 1
+                        
+                        # See if they have 5 cards
+                        player_total = 0
+                        dealer_total = 0
+
+                        # get dealer score
+                        for score in dealer_score:
+                            dealer_total += score
+
+                        # get player score
+                        for score in player_score:
+                            player_total += score
+
+                        # Check to see if <= 21
+                        if player_total <= 21:
+                            # player wins
+                            # disable buttons
+                            cardb.config(state="disabled")
+                            standb.config(state="disabled")
+                            messagebox.showinfo("Five card trick", "Player wins")
                 except:
                     print("No cards in deck")
 
