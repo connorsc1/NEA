@@ -1,4 +1,4 @@
 {
 "user" : "pass"
-,"connor" : "cawston"
+,"connor" : "pass"
 }
